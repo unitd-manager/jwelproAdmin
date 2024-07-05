@@ -153,6 +153,8 @@ const BroadCastDetailsTable = Loadable(lazy(() => import('../views/detailTable/B
 const SubCategoryTable = Loadable(lazy(() => import('../views/smartconTables/SubCategory')));
 const BlogDetailsTable = Loadable(lazy(() => import('../views/detailTable/BlogDetails')));
 const SupplierDetailsTable = Loadable(lazy(() => import('../views/detailTable/SupplierDetails')));
+const Scheme = Loadable(lazy(() => import('../views/smartconTables/Scheme')));
+const SchemeDetails = Loadable(lazy(() => import('../views/detailTable/SchemeDetails')));
 
 
 const SubCategoryDetailsTable = Loadable(
@@ -204,6 +206,7 @@ const EnquiryDetailsTable = Loadable(
 );
 const InventoryEdit = Loadable(lazy(() => import('../views/EditData/InventoryEdit')));
 const SupplierEdit = Loadable(lazy(() => import('../views/EditData/SupplierEdit')));
+const SchemeEdit = Loadable(lazy(() => import('../views/EditData/SchemeEdit')));
 //Reports
 const ProjectReportTable = Loadable(lazy(() => import('../views/Reports/ProjectReport')));
 const OverallSalesReportTable = Loadable(lazy(() => import('../views/Reports/OverAllSalesSummaryReport')));
@@ -260,6 +263,7 @@ const Routernew = () => {
           <Route path="/InventoryEdit/:id" name="inventorydata" element={<InventoryEdit />}></Route>
                    <Route path="/SupplierEdit/:id" name="supplierdata" element={<SupplierEdit />}></Route>
           <Route path="/sectionEdit/:id" name="sectiondata" element={<SectionEdit />}></Route>
+          <Route path="/SchemeEdit/:id" name="contentdata" element={<SchemeEdit />}></Route>
          
           
           
@@ -443,6 +447,8 @@ const Routernew = () => {
           <Route path="/Support" name="supportdata" element={<Support />}></Route>
           <Route path="/SupportNew" name="supportnewdata" element={<SupportNewTable />}></Route>
           <Route path="/SupportDetails" name="supportdetailsdata" element={<SupportDetails />}></Route>
+          <Route path="/Scheme" name="shemedata" element={<Scheme />}></Route>
+          <Route path="/SchemeDetails" name="shemedetailsdata" element={<SchemeDetails />}></Route>
         
           <Route path="/Employeetrainingreports" name="employeetrainingreportdata" element={<EmployeetrainingreportsTable />}></Route>
           <Route path="/StatementofAccountsReport" name="statementofAccountsreportdata" element={<StatementofAccountsReport />}></Route>
