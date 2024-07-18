@@ -154,7 +154,9 @@ const SubCategoryTable = Loadable(lazy(() => import('../views/smartconTables/Sub
 const BlogDetailsTable = Loadable(lazy(() => import('../views/detailTable/BlogDetails')));
 const SupplierDetailsTable = Loadable(lazy(() => import('../views/detailTable/SupplierDetails')));
 const Scheme = Loadable(lazy(() => import('../views/smartconTables/Scheme')));
+const Finance = Loadable(lazy(() => import('../views/smartconTables/Finance')));
 const SchemeDetails = Loadable(lazy(() => import('../views/detailTable/SchemeDetails')));
+const FinanceDetails = Loadable(lazy(() => import('../views/detailTable/FinanceDetails')));
 
 
 const SubCategoryDetailsTable = Loadable(
@@ -207,6 +209,7 @@ const EnquiryDetailsTable = Loadable(
 const InventoryEdit = Loadable(lazy(() => import('../views/EditData/InventoryEdit')));
 const SupplierEdit = Loadable(lazy(() => import('../views/EditData/SupplierEdit')));
 const SchemeEdit = Loadable(lazy(() => import('../views/EditData/SchemeEdit')));
+const FinanceEdit = Loadable(lazy(() => import('../views/EditData/FinanceEdit')));
 //Reports
 const ProjectReportTable = Loadable(lazy(() => import('../views/Reports/ProjectReport')));
 const OverallSalesReportTable = Loadable(lazy(() => import('../views/Reports/OverAllSalesSummaryReport')));
@@ -264,6 +267,7 @@ const Routernew = () => {
                    <Route path="/SupplierEdit/:id" name="supplierdata" element={<SupplierEdit />}></Route>
           <Route path="/sectionEdit/:id" name="sectiondata" element={<SectionEdit />}></Route>
           <Route path="/SchemeEdit/:id" name="contentdata" element={<SchemeEdit />}></Route>
+          <Route path="/FinanceEdit/:id" name="contentdata" element={<FinanceEdit />}></Route>
          
           
           
@@ -449,6 +453,8 @@ const Routernew = () => {
           <Route path="/SupportDetails" name="supportdetailsdata" element={<SupportDetails />}></Route>
           <Route path="/Scheme" name="shemedata" element={<Scheme />}></Route>
           <Route path="/SchemeDetails" name="shemedetailsdata" element={<SchemeDetails />}></Route>
+          <Route path="/Finance" name="financedata" element={<Finance />}></Route>
+          <Route path="/FinanceDetails" name="financedetailsdata" element={<FinanceDetails />}></Route>
         
           <Route path="/Employeetrainingreports" name="employeetrainingreportdata" element={<EmployeetrainingreportsTable />}></Route>
           <Route path="/StatementofAccountsReport" name="statementofAccountsreportdata" element={<StatementofAccountsReport />}></Route>

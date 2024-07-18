@@ -12,38 +12,33 @@ export default function CustomerDetail({financeDetails}) {
             <Row>
               <Col md="4" sm="12">
                 <FormGroup>
-                  <Label>Customer Name</Label><br />
-                  {financeDetails && financeDetails.cust_first_name}
+                  <Label>Contat Name</Label><br />
+                  {financeDetails && financeDetails.first_name}
+                </FormGroup>
+              </Col>
+              
+              <Col md="4" sm="12">
+                <FormGroup>
+                  <Label>Mobile</Label>
+                  <br />
+                  <span>{financeDetails && financeDetails.mobile}</span>
+                </FormGroup>
+              </Col>
+              <Col md="4" sm="12">
+                <FormGroup>
+                  <Label>Email</Label>
+                  <br />
+                  <span>{financeDetails && financeDetails.email}</span>
                 </FormGroup>
               </Col>
               <Col md="4" sm="12">
                 <FormGroup>
                   <Label> Address 1 </Label>
                   <br />
-                  <span>{financeDetails && financeDetails.cust_address1}</span>
+                  <span>{financeDetails && financeDetails.address1}</span>
                 </FormGroup>
               </Col>
-              <Col md="4" sm="12">
-                <FormGroup>
-                  <Label> Address 2 </Label>
-                  <br />
-                  <span>{financeDetails && financeDetails.cust_address2}</span>
-                </FormGroup>
-              </Col>
-              <Col md="4" sm="12">
-                <FormGroup>
-                  <Label> Country </Label>
-                  <br />
-                  <span>{financeDetails && financeDetails.cust_address_country}</span>
-                </FormGroup>
-              </Col>
-              <Col md="4" sm="12">
-                <FormGroup>
-                  <Label> Postal Code</Label>
-                  <br />
-                  <span>{financeDetails && financeDetails.cust_address_po_code}</span>
-                </FormGroup>
-              </Col>
+
             </Row>
      
         </FormGroup>

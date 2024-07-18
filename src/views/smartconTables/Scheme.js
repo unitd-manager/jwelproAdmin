@@ -11,7 +11,6 @@ import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-import message from '../../components/Message';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -20,6 +19,7 @@ import CommonTable from '../../components/CommonTable';
 const Scheme = () => {
   //Const Variables
   const [scheme, setScheme] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   //getting data from scheme
   const getScheme = () => {
@@ -27,11 +27,12 @@ const Scheme = () => {
       .get('/scheme/getScheme')
       .then((res) => {
         setScheme(res.data.data);
-      })
-      .catch(() => {
-        message('Cannot get Scheme Data', 'error');
+        setLoading(false)
+      }).catch(()=>{
+        setLoading(false)
       });
-  };
+    };
+
   useEffect(() => {
     setTimeout(() => {
       $('#example').DataTable({
@@ -121,6 +122,7 @@ const Scheme = () => {
       <BreadCrumbs />
 
       <CommonTable
+      loading={loading}
         title="Scheme List"
         Button={
           <Link to="/SchemeDetails">

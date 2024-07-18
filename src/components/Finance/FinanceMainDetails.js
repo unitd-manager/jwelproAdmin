@@ -16,19 +16,18 @@ export default function FinanceMainDetails({ financeDetails , handleInputs,}) {
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Order Id </Label>
+                  <Label>Order Id</Label>
                   <br />
-                  <span>{financeDetails && financeDetails.order_id} </span>
+                  <span>{financeDetails && financeDetails.order_id}</span>
                 </FormGroup>
               </Col>
-              
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>Payment Method </Label>
                   <br />
                   <span>{financeDetails && financeDetails.payment_method} </span>
                 </FormGroup>
-              </Col>
+              </Col> */}
             <Col md="3">
                 <FormGroup>
                   <Label>Order Date</Label>
@@ -39,13 +38,20 @@ export default function FinanceMainDetails({ financeDetails , handleInputs,}) {
                 </FormGroup>
               </Col>
 
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>Delivery Date</Label>
                   <br />
                   <span>
                     {financeDetails && financeDetails.delivery_date}
                   </span>
+                </FormGroup>
+              </Col> */}
+              <Col md="3">
+                <FormGroup>
+                  <Label>Scheme</Label>
+                  <br />
+                  <span>{financeDetails && financeDetails.title}</span>
                 </FormGroup>
               </Col>
               <Col md="3">

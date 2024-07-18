@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const CustomerDetails = () => {
   //All const variables
   const [content, setContent] = useState();
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
   const [contentDetails, setContentDetails] = useState({
-    title: '',
-    creation_date: moment(),
-    content_date: moment(),
-    content_type: '',
+    first_name: '',
   });
   //setting data in customerDetails
   const handleInputs = (e) => {
@@ -34,6 +32,7 @@ const CustomerDetails = () => {
   const insertCustomerData = () => {
     if (contentDetails.first_name !== '') {
       contentDetails.creation_date = creationdatetime;
+      contentDetails.created_by = loggedInuser.first_name;
       api
         .post('/contact/insertContact', contentDetails)
         .then((res) => {
@@ -47,7 +46,7 @@ const CustomerDetails = () => {
           message('Network connection error.', 'error');
         });
     } else {
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
   useEffect(() => {
@@ -65,7 +64,7 @@ const CustomerDetails = () => {
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>Name</Label>
+                    <Label>Name</Label><span className='required'>*</span>
                     <Input
                       type="text"
                       onChange={handleInputs}
@@ -85,17 +84,21 @@ const CustomerDetails = () => {
                         insertCustomerData();
                                   }}
                     >
-                      Save
+                      Save & Continue
                     </Button>
                     <Button
-                      onClick={() => {
-                        navigate(-1);
-                      }}
-                      type="button"
-                      className="btn btn-dark shadow-none"
-                    >
-                      Cancel
-                    </Button>
+                    type="submit"
+                    className="btn btn-dark shadow-none"
+                    onClick={(e) => {
+                      if (window.confirm('Are you sure you want to cancel? ')) {
+                        navigate('/Customer');
+                      } else {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    Go to List
+                  </Button>
                   </div>
                 </Row>
               </FormGroup>
