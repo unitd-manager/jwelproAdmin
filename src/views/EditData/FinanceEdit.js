@@ -1,5 +1,5 @@
 import React, { useEffect, useState,useContext } from 'react';
-import { TabContent, TabPane } from 'reactstrap';
+import { TabContent, TabPane, Row, Form, FormGroup, Table } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
@@ -12,7 +12,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import CustomerDetail from '../../components/Finance/CustomerDetail';
-// import FinanceInvoiceModal from '../../components/FinanceTable/FinanceInvoiceModal';
+// import InvoiceTable from '../../components/Finance/InvoiceTable';
 // import CustomerFinanceReceipt from '../../components/FinanceTable/CustomerFinanceReceipt';
 // import CustomerFinanceCreditNote from '../../components/FinanceTable/CustomerFinanceCreditNote';
 // import FinanceSummary from '../../components/FinanceTable/FinanceSummary';
@@ -33,7 +33,9 @@ const FinanceEdit = () => {
   // const [editReceiptModal, setEditReceiptModal] = useState(false);
   // const [editReceiptDataModal, setReceiptDataModal] = useState(false);
   // const [editModal, setEditModal] = useState(false);
-  const [financeDetails, setFinanceDetails] = useState(null);
+  const [invoicedata, setInvoicedata] = useState([]);
+  const [receiptdata, setReceiptdata] = useState([]);
+  const [financeDetails, setFinanceDetails] = useState({ scheme_id: '', contact_id: '' })
   // const [createInvoice, setCreateInvoice] = useState(null);
   // const [cancelInvoice, setCancelInvoice] = useState(null);
   // const [cancelReceipt, setCancelReceipt] = useState(null);
@@ -60,10 +62,8 @@ const FinanceEdit = () => {
   const tabs = [
     // { id: '1', name: 'Delivery Address' },
     { id: '1', name: 'Customer Details' },
-    { id: '3', name: 'Summary' },
-    { id: '4', name: 'Invoice(s)' },
-    { id: '5', name: 'Receipt(s)' },
-    { id: '6', name: 'CreditNote(s)' },
+    { id: '2', name: 'Invoice(s)' },
+    { id: '3', name: 'Receipt(s)' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -203,6 +203,29 @@ console.log('ids1',financeDetails);
       });
   };
 
+  const getInvoiceItemsDataById = () => {
+    api
+      .post('/scheme/getInvoiceItemsDataById', { scheme_id: financeDetails.scheme_id, contact_id: financeDetails.contact_id })
+      .then((res) => {
+        setInvoicedata(res.data.data[0]);
+        console.log('setInvoicedata', res.data.data[0]);
+      })
+      .catch(() => {
+        message('Failed to fetch scheme contacts.', 'error');
+      });
+};
+
+const getReceiptById = () => {
+  api
+    .post('/scheme/getReceiptById', { scheme_id: financeDetails.scheme_id, contact_id: financeDetails.contact_id })
+    .then((res) => {
+      setReceiptdata(res.data.data[0]);
+      console.log('receiptdata', res.data.data[0]);
+    })
+    .catch(() => {
+      message('Failed to fetch scheme contacts.', 'error');
+    });
+};
   //For editting Finace Record
   const editFinanceData = () => {
     financeDetails.modification_date = creationdatetime;
@@ -217,6 +240,82 @@ console.log('ids1',financeDetails);
         message('Unable to edit record.', 'error');
       });
   };
+
+  const columns = [
+    {
+      name: 'id',
+      selector: 'contact_id',
+      grow: 0,
+      wrap: true,
+      width: '4%',
+    },
+    {
+      name: 'Invoice Date',
+      selector: 'invoice_date',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Month',
+      selector: 'month',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
+    {
+      name: 'Invoice Amount',
+      //name: 'Phone(Direct)',
+      selector: 'amount',
+      sortable: true,
+      grow: 0,
+    },
+    {
+      name: 'Remarks',
+      selector: 'remarks',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
+  ];
+
+  const receiptcolumns = [
+    {
+      name: 'id',
+      selector: 'receipt_id',
+      grow: 0,
+      wrap: true,
+      width: '4%',
+    },
+    {
+      name: 'Receipt Date',
+      selector: 'receipt_date',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Month',
+      selector: 'month',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
+    {
+      name: 'Receipt Amount',
+      //name: 'Phone(Direct)',
+      selector: 'amount',
+      sortable: true,
+      grow: 0,
+    },
+  ];
+
+
+  useEffect(() => {
+     getInvoiceItemsDataById();
+     getReceiptById();
+  }, [financeDetails.scheme_id], [financeDetails.contact_id]);
+
 
   useEffect(() => {
     // getInvoiceById();
@@ -265,28 +364,72 @@ console.log('ids1',financeDetails);
           </TabPane> */}
 
           {/* Customer Details Form */}
+          
+          <TabPane tabId="3">
+              <Row>
+              <Form>
+                <FormGroup>
+        <Table id="example" className="display border border-secondary rounded">
+          <thead>
+            <tr>
+              {receiptcolumns.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {receiptdata &&
+              receiptdata.map((element, i) => {
+                return (
+                  <tr key={element.invoice_id}>
+                    <td>{i + 1}</td>
+                    <td>{element.receipt_date}</td>
+                    <td>{element.month}</td>
+                    <td>{element.amount}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </Table>
+        </FormGroup>
+        </Form>
+      </Row>
+          </TabPane>
           <TabPane tabId="1">
             <CustomerDetail financeDetails={financeDetails}></CustomerDetail>
           </TabPane>
-          {/* Summary */}
-          <TabPane tabId="3">
-            {/* <FinanceSummary
-              invoicesummary={invoicesummary}
-              receiptsummary={receiptsummary}
-              invoiceitemsummary={invoiceitemsummary}
-            ></FinanceSummary> */}
+          
+          <TabPane tabId="2">
+              <Row>
+              <Form>
+                <FormGroup>
+        <Table id="example" className="display border border-secondary rounded">
+          <thead>
+            <tr>
+              {columns.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {invoicedata &&
+              invoicedata.map((element, i) => {
+                return (
+                  <tr key={element.invoice_id}>
+                    <td>{i + 1}</td>
+                    <td>{element.invoice_date}</td>
+                    <td>{element.month}</td>
+                    <td>{element.amount}</td>
+                    <td>{element.remarks}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </Table>
+        </FormGroup>
+        </Form>
+      </Row>
           </TabPane>
-          {/* <TabPane tabId="4">
-            <FinanceInvoiceModal
-              createInvoice={createInvoice}
-              cancelInvoice={cancelInvoice}
-              invoiceCancel={invoiceCancel}
-              setEditModal={setEditModal}
-              setEditInvoiceModal={setEditInvoiceModal}
-              setInvoiceDatas={setInvoiceDatas}
-              financeDetails={financeDetails}
-            ></FinanceInvoiceModal>
-          </TabPane> */}
           {/* <TabPane tabId="5">
             <CustomerFinanceReceipt
               receiptCancel={receiptCancel}
