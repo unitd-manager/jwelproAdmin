@@ -113,7 +113,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "ftp-deploy --server 43.228.126.245 --username ftp_unitdecomadmin --password \"PYt4czcbWCPPZL6k\""
+    "deploy": "ftp-deploy --server 192.64.114.83 --username ftp_jewelpro --password \"9f43263c2221e\""
   },
   "eslintConfig": {
     "extends": [
