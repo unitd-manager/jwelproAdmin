@@ -23,6 +23,7 @@ import Tab from '../../components/project/Tab';
 import ApiButton from '../../components/ApiButton';
 import AppContext from '../../context/AppContext';
 
+
 const FinanceEdit = () => {
   // All state variables
   // const [editInvoiceData, setEditInvoiceData] = useState(false);
@@ -64,6 +65,7 @@ const FinanceEdit = () => {
     { id: '1', name: 'Customer Details' },
     { id: '2', name: 'Invoice(s)' },
     { id: '3', name: 'Receipt(s)' },
+    // { id: '4', name: 'Payment' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -205,10 +207,10 @@ console.log('ids1',financeDetails);
 
   const getInvoiceItemsDataById = () => {
     api
-      .post('/scheme/getInvoiceItemsDataById', { scheme_id: financeDetails.scheme_id, contact_id: financeDetails.contact_id })
+      .post('/finance/getInvoiceItemsDataById', { scheme_id: financeDetails.scheme_id, contact_id: financeDetails.contact_id })
       .then((res) => {
-        setInvoicedata(res.data.data[0]);
-        console.log('setInvoicedata', res.data.data[0]);
+        setInvoicedata(res.data.data);
+        console.log('setInvoicedata', res.data.data);
       })
       .catch(() => {
         message('Failed to fetch scheme contacts.', 'error');
@@ -217,10 +219,10 @@ console.log('ids1',financeDetails);
 
 const getReceiptById = () => {
   api
-    .post('/scheme/getReceiptById', { scheme_id: financeDetails.scheme_id, contact_id: financeDetails.contact_id })
+    .post('/finance/getReceiptById', { scheme_id: financeDetails.scheme_id, contact_id: financeDetails.contact_id })
     .then((res) => {
-      setReceiptdata(res.data.data[0]);
-      console.log('receiptdata', res.data.data[0]);
+      setReceiptdata(res.data.data);
+      console.log('receiptdata', res.data.data);
     })
     .catch(() => {
       message('Failed to fetch scheme contacts.', 'error');
@@ -277,6 +279,13 @@ const getReceiptById = () => {
       width: 'auto',
       grow: 3,
     },
+    // {
+    //   name: 'Created By',
+    //   selector: 'created_by',
+    //   sortable: true,
+    //   width: 'auto',
+    //   grow: 3,
+    // },
   ];
 
   const receiptcolumns = [
@@ -328,6 +337,8 @@ const getReceiptById = () => {
     // getInvoiceReceiptSummaryById();
     // getInvoiceItemSummaryById();
   }, [id]);
+  
+
   return (
     <>
       <BreadCrumbs heading={financeDetails && financeDetails.order_id} />
@@ -413,14 +424,15 @@ const getReceiptById = () => {
           </thead>
           <tbody>
             {invoicedata &&
-              invoicedata.map((element, i) => {
+              invoicedata.map((ele, i) => {
                 return (
-                  <tr key={element.invoice_id}>
+                  <tr key={ele.invoice_id}>
                     <td>{i + 1}</td>
-                    <td>{element.invoice_date}</td>
-                    <td>{element.month}</td>
-                    <td>{element.amount}</td>
-                    <td>{element.remarks}</td>
+                    <td>{ele.invoice_date}</td>
+                    <td>{ele.month}</td>
+                    <td>{ele.amount}</td>
+                    <td>{ele.remarks}</td>
+                    {/* <td>{element.created_by}</td> */}
                   </tr>
                 );
               })}
@@ -430,15 +442,8 @@ const getReceiptById = () => {
         </Form>
       </Row>
           </TabPane>
-          {/* <TabPane tabId="5">
-            <CustomerFinanceReceipt
-              receiptCancel={receiptCancel}
-              cancelReceipt={cancelReceipt}
-              receipt={receipt}
-              setEditReceiptModal={setEditReceiptModal}
-              setReceiptDataModal={setReceiptDataModal}
-              financeDetails={financeDetails}
-            ></CustomerFinanceReceipt>
+          {/* <TabPane tabId="4">
+         
           </TabPane> */}
           {/* <TabPane tabId="6">
             <CustomerFinanceCreditNote note={note}></CustomerFinanceCreditNote>

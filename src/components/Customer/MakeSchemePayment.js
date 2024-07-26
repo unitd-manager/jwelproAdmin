@@ -10,12 +10,13 @@ const months = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-const FinanceReceiptData = ({ SchemeId, ContactId, handleAddOrder, checkOrderExists }) => {
+const FinanceReceiptData = ({ SchemeId, ContactId, handleAddOrder, checkOrderExists, setSecondModalOpen }) => {
   FinanceReceiptData.propTypes = {
     SchemeId: PropTypes.any,
     ContactId: PropTypes.any,
     handleAddOrder: PropTypes.any,
     checkOrderExists: PropTypes.any,
+    setSecondModalOpen: PropTypes.any,
   };
 
   const [createReceipt, setCreateReceipt] = useState({});
@@ -157,10 +158,12 @@ const FinanceReceiptData = ({ SchemeId, ContactId, handleAddOrder, checkOrderExi
 
     if (orderExists) {
       handleSubmit();
+      setSecondModalOpen(false)
     } else {
       // Populate orderdetails with contact details before opening the modal
       handleAddOrder();
       handleSubmit();
+      setSecondModalOpen(false)
     }
   };
 

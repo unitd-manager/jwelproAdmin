@@ -771,6 +771,7 @@ useEffect(() => {
                 schemeData={selectedScheme} // Pass the whole scheme data if needed
                 handleAddOrder={handleAddOrder}
                 checkOrderExists={checkOrderExists}
+                setSecondModalOpen={setSecondModalOpen}
               />
             )}
           </ModalBody>
