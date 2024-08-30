@@ -504,8 +504,7 @@ useEffect(() => {
                     onChange={handleInputs}
                     value={contentDetails && contentDetails.contact_id}
                     name="contact_id"
-                    readonly
-                  />
+                  ></Input>
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -516,6 +515,7 @@ useEffect(() => {
                     onChange={handleInputs}
                     value={contentDetails && contentDetails.first_name}
                     name="first_name"
+                    
                   />
                 </FormGroup>
               </Col>

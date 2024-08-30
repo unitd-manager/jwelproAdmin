@@ -18,7 +18,7 @@ const FinanceReceiptData = ({ SchemeId, ContactId, handleAddOrder, checkOrderExi
     checkOrderExists: PropTypes.any,
     setSecondModalOpen: PropTypes.any,
   };
-
+console.log('SchemeId',SchemeId);
   const [createReceipt, setCreateReceipt] = useState({});
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [schemeAmount, setSchemeAmount] = useState(0);
@@ -27,9 +27,9 @@ const FinanceReceiptData = ({ SchemeId, ContactId, handleAddOrder, checkOrderExi
 
   useEffect(() => {
     const getSchemeByID = () => {
-      api.post('/scheme/getSchemeByID', { scheme_id: SchemeId })
+      api.post('/scheme/getContactSchemeByID', { scheme_id: SchemeId, contact_id: ContactId  })
         .then((res) => {
-          setSchemeAmount(res.data.data.amount);
+          setSchemeAmount(res.data.data.schemeamount); 
         })
         .catch(() => {
           message('Order Data Not Found', 'info');
