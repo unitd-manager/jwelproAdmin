@@ -68,41 +68,65 @@ console.log('SchemeId',SchemeId);
   };
 
   useEffect(() => {
+    const fetchPaidMonths = async () => {
+      try {
+        const res = await api.post('/contact/getPaymentHistory', { scheme_id: SchemeId, contact_id: ContactId });
+        const paidMonths = res.data.data.map(record => record.month); 
+        
+        const remainingMonths = 12 - paidMonths.length;
+        const baseAmount = Math.floor(schemeAmount / remainingMonths);
+        let remainder = schemeAmount - (baseAmount * remainingMonths);
+  
+        const amounts = selectedMonths.map(month => {
+          if (paidMonths.includes(month)) {
+            return 0; 
+          }
+          const additionalAmount = remainder > 0 ? 1 : 0;
+          remainder--;
+          return baseAmount + additionalAmount;
+        });
+  
+        const totalAmount = amounts.reduce((sum, amount) => sum + amount, 0);
+        setCreateReceipt(prev => ({ ...prev, amount: totalAmount }));
+        
+      } catch (error) {
+        message('Failed to fetch payment history', 'error');
+      }
+    };
+  
     if (selectedMonths.length > 0) {
-      const baseAmount = Math.floor(schemeAmount / 12);
-      let remainder = schemeAmount - (baseAmount * 12);
-
-      const amounts = selectedMonths.map(() => {
-        const additionalAmount = remainder > 0 ? 1 : 0;
-        remainder--;
-        return baseAmount + additionalAmount;
-      });
-
-      const totalAmount = amounts.reduce((sum, amount) => sum + amount, 0);
-      setCreateReceipt(prev => ({ ...prev, amount: totalAmount }));
+      fetchPaidMonths();
     } else {
       setCreateReceipt(prev => ({ ...prev, amount: 0 }));
     }
   }, [selectedMonths, schemeAmount]);
-
+  
   const handleSubmit = async () => {
-    const baseAmount = Math.floor(schemeAmount / 12);
-    let remainder = schemeAmount - (baseAmount * 12);
-  
-    const invoiceRecords = selectedMonths.map(month => {
-      const additionalAmount = remainder > 0 ? 1 : 0;
-      remainder--;
-      const monthAmount = baseAmount + additionalAmount;
-  
-      return {
-        ...createReceipt,
-        month,
-        amount: monthAmount,
-        scheme_id: SchemeId,
-        contact_id: ContactId,
-        date: createReceipt.date || moment().format('YYYY-MM-DD'),
-      };
-    });
+    try {
+      const res = await api.post('/contact/getPaymentHistory', { scheme_id: SchemeId, contact_id: ContactId });
+      const paidMonths = res.data.data.map(record => record.month);
+      
+      const remainingMonths = 12 - paidMonths.length;
+      const baseAmount = Math.floor(schemeAmount / remainingMonths);
+      let remainder = schemeAmount - (baseAmount * remainingMonths);
+    
+      const invoiceRecords = selectedMonths.map(month => {
+        if (paidMonths.includes(month)) {
+          return null; // Skip already paid months
+        }
+        const additionalAmount = remainder > 0 ? 1 : 0;
+        remainder--;
+        const monthAmount = baseAmount + additionalAmount;
+    
+        return {
+          ...createReceipt,
+          month,
+          amount: monthAmount,
+          scheme_id: SchemeId,
+          contact_id: ContactId,
+          date: createReceipt.date || moment().format('YYYY-MM-DD'),
+        };
+      }).filter(record => record !== null);
   
     try {
       const totalAmount = invoiceRecords.reduce((sum, record) => sum + record.amount, 0);
@@ -150,7 +174,10 @@ console.log('SchemeId',SchemeId);
       console.error('Error inserting records:', error);
       message('Error inserting records', 'danger');
     }
-  };
+  } catch (error) {
+    message('Failed to fetch payment history', 'error');
+  }
+};
 
   const handleCreatePayment = async () => {
     const orderExists = await checkOrderExists(SchemeId, ContactId);
